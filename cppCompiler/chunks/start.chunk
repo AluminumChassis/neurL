@@ -1,0 +1,35 @@
+.586
+.model flat, stdcall
+option casemap :none
+
+include C:\masm32\include\masm32rt.inc
+include C:\masm32\macros\macros.asm
+include C:\masm32\include\msvcrt.inc
+includelib C:\masm32\lib\kernel32
+includelib C:\masm32\lib\msvcrt
+includelib C:\masm32\lib\masm32
+
+.data
+
+stm  SYSTEMTIME<>
+    org stm
+wYear dw 0
+wMonth dw 0
+wToDay dw 0 ; Sunday 0 to Saturday 6
+wDay    dw 0
+wHour   dw 0
+wMinute dw 0
+wSecond dw 0
+wKsecond dw 0
+startTime dw 0
+pow real8 1.00
+zero real8 0.0
+negone sdword -1
+one dword 1
+two dword 2
+ten dword 10
+rnd dword 0
+rndCtr dword 0
+d real8 0.0
+output real8 0.0
+result real8 0.0

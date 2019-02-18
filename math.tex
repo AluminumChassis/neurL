@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{NeurL}
+\author{Benjamin Ciccarelli }
+\date{February 2019}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+\maketitle
+
+\section{Mathematics Behind NeurL}
+
+The output of a neuron can be described by
+\[ \sigma (i_{1}*w_{1} + i_{2}*w_{2} ... i_{n}*w_{n} ) \]
+or 
+\[ O = \sigma (\sum_{x = 1}^{n} i_{x}*w_{x}) \]
+where
+\[ \sigma(x) = \frac{e^{x}}{1+e^{x}} \]
+The partial derivative of the output with respect to a weight is
+\[ \frac{\delta O_{n}}{\delta w_{n}} = \sigma'(\sum_{x = 1}^{n} i_{x}*w_{x}) * i_{n}  \]
+or 
+\[ \frac{\delta O_{n}}{\delta w_{n}} = \sigma'(\sigma^{-1}(O)) * i_{n}  \]
+or 
+\[ \frac{\delta O_{n}}{\delta w_{n}} = (O)*(1-O) * i_{n}  \]
+
+\end{document}

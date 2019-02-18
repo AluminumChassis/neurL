@@ -1,0 +1,112 @@
+.code
+
+_random:
+	invoke GetSystemTime, addr stm
+	movzx ecx,wKsecond
+	add ecx, rndCtr
+	invoke nseed, ecx
+	invoke nrandom, 10d
+	mov rnd,0
+	add rnd, eax
+	add rndCtr, ecx
+	ret
+epow:
+	fld output
+	fstp pow
+	fldl2e
+	FMUL pow
+	fst result
+	fld st
+	frndint
+	fsub st(1),st
+	fxch st(1)
+	f2xm1
+	fld1
+	fadd
+	fscale       
+	fstp result
+	fstp st(0)
+	ret
+delay:
+	dec bp
+	cmp bp, 0
+	jne delay
+	dec si
+	nop
+	jnz delay
+	dec di
+	cmp di,0 
+	jnz delay
+	ret
+setupWeights:
+	mov ebx, 4
+	xor esi, esi
+	newWeight:
+		push esi
+		mov bp, 8
+		fldz
+		digit:
+			call _random
+			FIADD rnd
+			FIDIV ten
+			FIMUL two
+			FISUB one
+			dec bp
+			jnz digit
+		pop esi
+		fstp REAL8 PTR weights[esi]
+		mov eax, -1
+		add esi, 8
+		dec ebx
+		jnz newWeight
+	ret
+run:
+	fldz
+	fstp output
+
+	mov ecx, 0
+	inWeight:
+		fld weights[ecx]
+		fmul inputs[eax*8+ecx]
+		fadd output
+		fstp output
+		add ecx,8
+		cmp ecx,24
+		jne inWeight
+
+	call epow
+
+	fld result
+	fiadd one
+	fst output
+	fisub one
+	fdiv output
+	fstp output
+	
+	ret
+d_sigmoid:
+	FiMUL negone
+	fiadd one
+	fmul d
+	ret
+train:
+	call run
+	
+	fld output
+	fimul negone
+	FADD outputs[ebx*8]
+	fst d
+	call d_sigmoid
+	fstp d
+
+	mov ecx, 0
+	err:
+		fld d
+		fmul inputs[eax*8+ecx]
+		fadd weights[ecx]
+		fstp weights[ecx]
+		add ecx,8
+		cmp ecx,24
+		jne err
+		
+	ret

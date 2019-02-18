@@ -1,0 +1,6 @@
+	invoke GetSystemTime, addr stm
+	mov di, wKsecond
+	sub di, startTime
+	printf("run time: %i ms\n", di)
+	exit
+end _start

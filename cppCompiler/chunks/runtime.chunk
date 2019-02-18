@@ -1,0 +1,5 @@
+_start:
+	
+	invoke GetSystemTime, addr stm
+	mov di, wKsecond
+	mov startTime, di
